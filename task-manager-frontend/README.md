@@ -1,36 +1,98 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Doit frontend
 
-## Getting Started
+A clean and modern frontend application for a task managment.
 
-First, run the development server:
+## Description
+
+This is a frontend application for a task manager built with Next.js, TypeScript and Tailwind CSS. The application provides a user interface to register and authenticate users, as well as to manage tasks (create, read, update, and delete).
+
+## System Design
+
+The application follows a component architecture, with each component responsible for a specific part of the user interface.
+
+-   Components: Individual UI elements, such as buttons, forms, and tables.
+-   Routes: In Next.js 13 and above, routes are defined inside the `app` directory. Each route corresponds to a specific page or component.
+-   Actions: Functions that handle user interactions and update the application state.
+
+## Project Structure
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+app/
+|-- actions/
+|   |-- auth.ts            # Authentication actions
+|   |-- tasks.ts           # Task management actions
+|-- (auth)/
+|   |-- login/             # Login page
+|   |-- register/          # Register page
+|-- dashboard/             # Dashboard page
+|-- api/
+|   |-- auth/              # Authentication API routes
+|       |-- [...nextauth]/  # NextAuth.js handler
+|-- components/
+|   |-- auth/
+|   |   |-- login-form.tsx # Login form component
+|   |   |-- register-form.tsx # Register form component
+|   |   |-- with-auth.tsx  # Higher-order component for authentication
+|   |-- task/
+|   |   |-- add-task-button.tsx # Add task button component
+|   |   |-- add-task-dialog.tsx # Add task dialog component
+|   |   |-- task-filter.tsx   # Task filter component
+|   |   |-- task-list.tsx    # Task list component
+|   |   |-- task.tsx         # Task component
+|   |   |-- update-task-dialog.tsx # Update task dialog component
+|   |-- ui/
+|       |-- button.tsx       # Button component
+|       |-- dialog.tsx       # Dialog component
+|       |-- input.tsx        # Input component
+|       |-- select.tsx       # Select component
+|       |-- skeleton.tsx     # Skeleton loader component
+|       |-- textarea.tsx     # Textarea component
+|       |-- toast.tsx        # Toast notification component
+|-- hooks/
+|   |-- useTaskStore.ts    # Custom hook for task store
+|-- layout.tsx             # Global layout component
+|-- page.tsx               # Home page
+
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Application Pages
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+-   `/`: Home page that redirects to the login page if the user is not authenticated, or to the dashboard page if the user is authenticated.
+-   `/login`: Login page that allows users to authenticate with their email and password.
+-   `/register`: Register page that allows users to create a new account with their username, email, and password.
+-   `/dashboard`: Dashboard page that displays the user's tasks and allows them to manage them.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Application State
 
-## Learn More
+The application state is managed using Zustand. The task store contains the following state:
 
-To learn more about Next.js, take a look at the following resources:
+-   `tasks`: An array of tasks.
+-   `isLoading`: A boolean flag indicating whether the tasks are being loaded.
+-   `error`: An error object if an error occurs while loading the tasks.
+-   `filterStatus`: A string indicating the current filter status.
 
--   [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
--   [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The task store provides the following methods:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+-   `fetchTasks`: A function for fetching tasks from the API.
+-   `addTask`: A function for adding a new task to the API.
+-   `deleteTask`: A function for deleting a task from the API.
+-   `updateTask`: A function for updating a task in the API.
+-   `setFilterStatus`: A function for setting the current filter status.
 
-## Deploy on Vercel
+## API Endpoints
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The application uses the following API endpoints:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+`/api/auth/register`: Register a new user.
+`/api/auth/login`: Authenticate a user and get a JWT token.
+`/api/tasks`: Get all tasks of the authenticated user.
+`/api/tasks`: Create a new task.
+`/api/tasks/:id`: Update a task.
+`/api/tasks/:id`: Delete a task.
+
+## How to run the application
+
+1. Install dependencies using `npm install`
+2. Set up the environment variables in a `.env.local` file in the root directory
+3. Run the application using `npm run dev`
+4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
