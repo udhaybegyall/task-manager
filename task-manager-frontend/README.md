@@ -83,12 +83,64 @@ The task store provides the following methods:
 
 The application uses the following API endpoints:
 
-`/api/auth/register`: Register a new user.
-`/api/auth/login`: Authenticate a user and get a JWT token.
-`/api/tasks`: Get all tasks of the authenticated user.
-`/api/tasks`: Create a new task.
-`/api/tasks/:id`: Update a task.
-`/api/tasks/:id`: Delete a task.
+-   `/api/auth/register`: Register a new user.
+-   `/api/auth/login`: Authenticate a user and get a JWT token.
+-   `/api/tasks`: Get all tasks of the authenticated user.
+-   `/api/tasks`: Create a new task.
+-   `/api/tasks/:id`: Update a task.
+-   `/api/tasks/:id`: Delete a task.
+
+## Frontend Logic Explained
+
+1. While not authenticated, the user is redirected to the login page.
+2. When the user is authenticated, they are redirected to the dashboard page.
+3. Upon clicking the "sign up" button, the user is redirected to the register page. upon successful registration, the user is redirected to the login page.
+4. Upon entring the dashboard page, the user is presented with a list of tasks. if there are no tasks, a message is displayed.
+5. Upon clicking the "add task" button, a dialog is displayed with an input field for the task name and a textarea for the task description. upon clicking the "add task" button, the task is added to the list of tasks and is immediately displayed in the dashboard.
+6. The tasks are automatically sorted by the set priority. i.e., the In Progress tasks are displayed first, followed by the Pending tasks, and then the Completed tasks.
+7. Upon clicking a task, it's shifted to the right and two buttons are displayed: "update task" and "delete task".
+8. To Do
+
+## Flow Diagram
+
+```mermaid
+graph TB
+    HomePage["Home Page"]
+    LoginPage["Login Page"]
+    RegisterPage["Register Page"]
+    DashboardPage["Dashboard Page"]
+    AddTaskDialog["Add Task Dialog"]
+    UpdateTaskDialog["Update Task Dialog"]
+
+    subgraph API
+        AuthAPI["Authentication API"]
+        TasksAPI["Tasks API"]
+    end
+
+    HomePage -->|Not Authenticated| LoginPage
+    HomePage -->|Authenticated| DashboardPage
+
+    LoginPage -->|Valid Credentials| AuthAPI
+    LoginPage <--|JWT Token| AuthAPI
+    LoginPage --> DashboardPage
+
+    RegisterPage -->|User Data| AuthAPI
+    RegisterPage <--|JWT Token| AuthAPI
+    RegisterPage --> DashboardPage
+
+    DashboardPage -->|Add Task Button Click| AddTaskDialog
+    DashboardPage -->|Update Task Button Click| UpdateTaskDialog
+    DashboardPage -->|Task List Load| TasksAPI
+    DashboardPage <--|Task List Data| TasksAPI
+
+    AddTaskDialog --> TasksAPI
+    AddTaskDialog <--|New Task Data| TasksAPI
+    AddTaskDialog --> DashboardPage
+
+    UpdateTaskDialog -->|Update Task Form Submit| TasksAPI
+    UpdateTaskDialog <--|Updated Task Data| TasksAPI
+    UpdateTaskDialog --> DashboardPage
+```
 
 ## How to run the application
 
