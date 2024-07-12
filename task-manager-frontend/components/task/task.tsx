@@ -3,8 +3,12 @@
 import { useRef, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Trash2, Edit } from 'lucide-react';
-import { Dialog, DialogTrigger } from '@/components/ui/dialog';
+
+import UpdateTaskButton from './update-task-button';
+
+import { Dialog } from '@/components/ui/dialog';
 import UpdateTaskDialog from '@/components/task/update-task-dialog';
+import { truncateDescription } from '@/lib/utils';
 
 interface TaskProps {
     id: string;
@@ -30,13 +34,6 @@ export default function Task({
     const [taskHeight, setTaskHeight] = useState(0);
     const taskRef = useRef<HTMLDivElement>(null);
     const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
-
-    // Utility function to truncate the description if it exceeds a certain length
-    // To Do: Move to utility file
-    const truncateDescription = (text: string, maxLength: number) => {
-        if (text?.length <= maxLength) return text;
-        return text?.slice(0, maxLength) + '...';
-    };
 
     const handleDelete = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -116,18 +113,14 @@ export default function Task({
                     </Button>
                 </div>
             </div>
-            <Dialog
-                open={isUpdateDialogOpen}
-                onOpenChange={setIsUpdateDialogOpen}
-            >
-                <UpdateTaskDialog
-                    taskId={id}
-                    initialTitle={title}
-                    initialDescription={description}
-                    initialStatus={status}
-                    onClose={() => setIsUpdateDialogOpen(false)}
-                />
-            </Dialog>
+            <UpdateTaskButton
+                isUpdateDialogOpen={isUpdateDialogOpen}
+                setIsUpdateDialogOpen={setIsUpdateDialogOpen}
+                id={id}
+                title={title}
+                description={description}
+                status={status}
+            />
         </>
     );
 }
