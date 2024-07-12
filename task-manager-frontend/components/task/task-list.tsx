@@ -4,6 +4,9 @@ import React, { useEffect, useState } from 'react';
 import Task from '@/components/task/task';
 import useTaskStore from '@/hooks/useTaskStore';
 import { useToast } from '@/components/ui/use-toast';
+import { PackageOpen } from 'lucide-react';
+
+import TaskSkeleton from '@/components/skeleton/task-skeleton';
 
 const statusOrder = {
     'To Do': 1,
@@ -35,7 +38,7 @@ export default function TaskList() {
     };
 
     if (isLoading) {
-        return <div>Loading tasks...</div>;
+        return <TaskSkeleton />;
     }
 
     if (error) {
@@ -69,7 +72,11 @@ export default function TaskList() {
                 ))
             ) : (
                 <div className='mt-10'>
-                    <p className='text-center text-muted-foreground'>
+                    <div className='flex items-center justify-center gap-2'>
+                        <PackageOpen className='h-5 w-5' />
+                        <h1 className='font-[500]'>No tasks found</h1>
+                    </div>
+                    <p className='text-center text-muted-foreground mt-2'>
                         You don&apos;t have any tasks yet.
                     </p>
                 </div>
