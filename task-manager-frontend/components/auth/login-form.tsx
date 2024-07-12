@@ -6,8 +6,8 @@ import { Input } from '@/components/ui/input';
 import { useState } from 'react';
 
 export default function LoginForm() {
-    const [email, setEmail] = useState('test@gmail.com');
-    const [password, setPassword] = useState('test027');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
     return (
         <form action={login} className='space-y-8'>
