@@ -5,9 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Trash2, Edit } from 'lucide-react';
 
 import UpdateTaskButton from './update-task-button';
-
-import { Dialog } from '@/components/ui/dialog';
-import UpdateTaskDialog from '@/components/task/update-task-dialog';
 import { truncateDescription } from '@/lib/utils';
 
 interface TaskProps {
@@ -32,9 +29,11 @@ export default function Task({
     isDone,
 }: TaskProps) {
     const [taskHeight, setTaskHeight] = useState(0);
-    const taskRef = useRef<HTMLDivElement>(null);
     const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
 
+    const taskRef = useRef<HTMLDivElement>(null);
+
+    // callback function for deleting a task
     const handleDelete = (e: React.MouseEvent) => {
         e.stopPropagation();
         if (onDelete) {
@@ -44,11 +43,13 @@ export default function Task({
         }
     };
 
+    // toggle the update dialog
     const handleEdit = (e: React.MouseEvent) => {
         e.stopPropagation();
         setIsUpdateDialogOpen(true);
     };
 
+    // calculate the height of the task
     useEffect(() => {
         if (taskRef.current) {
             setTaskHeight(taskRef.current.offsetHeight);
@@ -81,14 +82,19 @@ export default function Task({
                             ? description
                             : truncateDescription(description, 50)}
                     </p>
-                    <p
-                        className={`text-sm mt-2 ${
-                            status === 'In Progress'
-                                ? 'text-green-500'
-                                : 'text-muted-foreground'
-                        }`}
-                    >
-                        Status: {status}
+                    <p className='text-sm mt-2 text-muted-foreground'>
+                        Status:{' '}
+                        <span
+                            className={`${
+                                status === 'In Progress'
+                                    ? 'text-green-500'
+                                    : status === 'To Do'
+                                    ? 'text-red-500'
+                                    : ''
+                            }`}
+                        >
+                            {status}
+                        </span>
                     </p>
                 </div>
                 <div
