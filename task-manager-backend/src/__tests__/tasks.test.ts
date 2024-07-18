@@ -3,6 +3,7 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 import request from 'supertest';
 import { app } from '../server';
 import jwt from 'jsonwebtoken';
+import Task from '../models/Task';
 
 let mongoServer: MongoMemoryServer;
 let authToken: string;
@@ -36,6 +37,10 @@ afterAll(async () => {
   await mongoServer.stop();
 });
 
+beforeEach(async () => {
+  await Task.deleteMany({});
+});
+
 describe('Task API', () => {
   it('should create a new task', async () => {
     const res = await request(app)
@@ -45,7 +50,6 @@ describe('Task API', () => {
         title: 'Test Task',
         description: 'Test Description',
         status: 'To Do',
-        user: userId
       });
     
     if (res.statusCode !== 201) {

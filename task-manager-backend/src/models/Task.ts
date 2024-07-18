@@ -5,6 +5,10 @@ export interface ITask extends Document {
   description: string;
   status: 'To Do' | 'In Progress' | 'Done';
   user: mongoose.Types.ObjectId;
+  reminder?: {
+    time?: Date;
+    isAcknowledged: boolean;
+  }
 }
 
 const TaskSchema: Schema = new Schema({
@@ -26,6 +30,13 @@ const TaskSchema: Schema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
+  },
+  reminder: {
+    time: { type: Date, required: false },
+    isAcknowledged: {
+      type: Boolean,
+      default: false,
+    },
   },
 }, { timestamps: true });
 
