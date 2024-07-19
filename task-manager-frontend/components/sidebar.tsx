@@ -3,7 +3,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { CheckSquare, BarChart2, User, Menu, LucideIcon } from 'lucide-react';
+import {
+    CheckSquare,
+    BarChart2,
+    User,
+    PanelLeftOpen,
+    LucideIcon,
+} from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import SignOutButton from '@/components/auth/sign-out-button';
@@ -75,9 +81,14 @@ const Sidebar = () => {
                                 isActive
                                     ? 'bg-[#1e1e1e] border-2 border-border'
                                     : ''
+                            } ${
+                                isSidebarOpen ? 'w-full justify-start px-4' : ''
                             }`}
                         >
                             <Icon className='h-6 w-6' />
+                            {isSidebarOpen && (
+                                <span className='ml-2'>{label}</span>
+                            )}
                         </Button>
                     </Link>
                 </TooltipTrigger>
@@ -97,16 +108,30 @@ const Sidebar = () => {
             <div className='fixed left-0 top-0 h-screen flex z-[90]'>
                 <aside
                     ref={sidebarRef}
-                    className={`${
-                        isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-                    } fixed left-0 top-0 h-screen w-64 bg-background text-foreground flex flex-col items-center justify-between py-4 transition-transform duration-300 md:translate-x-0 md:w-20 z-50`}
+                    className={`
+                        fixed left-0 top-0 h-screen bg-background text-foreground 
+                        flex flex-col items-center justify-between py-4 px-2
+                        transition-all duration-300 ease-in-out
+                        md:translate-x-0 md:w-20 z-50
+                        ${
+                            isSidebarOpen
+                                ? 'translate-x-0 w-64'
+                                : '-translate-x-full w-64'
+                        }
+                    `}
                 >
-                    <div className='flex flex-col items-center space-y-4'>
+                    <div className='flex flex-col items-center space-y-4 w-full'>
                         {/* Logo */}
-                        <div className='text-xl'>Doit.</div>
+                        <div
+                            className={`text-xl md:text-2xl ${
+                                isSidebarOpen ? 'text-3xl self-start ml-4' : ''
+                            }`}
+                        >
+                            {isSidebarOpen ? 'Doit.' : 'D.'}
+                        </div>
 
                         {/* Navigation Icons */}
-                        <div>
+                        <div className={`${isSidebarOpen ? 'w-full' : ''}`}>
                             <NavItem
                                 href='/dashboard'
                                 icon={CheckSquare}
@@ -123,13 +148,26 @@ const Sidebar = () => {
                     {/* User Avatar and Dropdown */}
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Avatar className='cursor-pointer'>
-                                <AvatarImage
-                                    src='https://avatars.githubusercontent.com/u/38879140?s=48&v=4'
-                                    alt='@begyall'
-                                />
-                                <AvatarFallback>UB</AvatarFallback>
-                            </Avatar>
+                            <div
+                                className={`${
+                                    isSidebarOpen
+                                        ? 'flex items-center border-2 border-border p-2 px-6 rounded-[50px]'
+                                        : ''
+                                }`}
+                            >
+                                <Avatar className={isSidebarOpen ? 'mr-2' : ''}>
+                                    <AvatarImage
+                                        src='https://avatars.githubusercontent.com/u/38879140?s=48&v=4'
+                                        alt='@begyall'
+                                    />
+                                    <AvatarFallback>UB</AvatarFallback>
+                                </Avatar>
+                                {isSidebarOpen && (
+                                    <span className='text-sm text-muted-foreground'>
+                                        Udhay
+                                    </span>
+                                )}
+                            </div>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent
                             align='end'
@@ -157,14 +195,14 @@ const Sidebar = () => {
                     </DropdownMenu>
                 </aside>
                 <button
-                    className='md:hidden fixed top-4 left-4 p-2 bg-background border border-border rounded-md'
+                    className='md:hidden fixed top-6 left-4 p-2 bg-background border border-border rounded-md'
                     onClick={toggleSidebar}
                 >
-                    <Menu className='h-6 w-6' />
+                    <PanelLeftOpen className='h-6 w-6' />
                 </button>
                 {isSidebarOpen && (
                     <div
-                        className='fixed inset-0 bg-black bg-opacity-50 z-40'
+                        className='md:hidden fixed inset-0 bg-black bg-opacity-50 z-40'
                         onClick={closeSidebar}
                     ></div>
                 )}
