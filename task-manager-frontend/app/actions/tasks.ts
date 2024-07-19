@@ -98,3 +98,45 @@ export async function deleteTask(id: string) {
         return { success: false, error: (error as Error).message };
     }
 }
+
+export async function setReminder(id: string, reminderTime: Date) {
+    try {
+        const response = await authFetch(`/tasks/${id}/reminder`, {
+            method: 'PATCH',
+            body: JSON.stringify({ reminderTime: reminderTime.toISOString() }),
+        });
+
+        if (response.success && response.task) {
+            revalidateTag('tasks');
+            return { success: true, task: response.task };
+        } else {
+            throw new Error(response.message || 'Failed to set reminder');
+        }
+    } catch (error) {
+        console.error('Error setting reminder:', error);
+        return { success: false, error: (error as Error).message };
+    }
+}
+
+export async function acknowledgeReminder(id: string) {
+    try {
+        const task = await authFetch(`/tasks/${id}/acknowledge-reminder`, {
+            method: 'PATCH',
+        });
+
+        revalidateTag('tasks');
+        return { success: true, task };
+    } catch (error) {
+        console.error('Error acknowledging reminder:', error);
+        return { success: false, error: (error as Error).message };
+    }
+}
+
+export async function getActiveReminders() {
+    try {
+        return await authFetch('/tasks/reminders');
+    } catch (error) {
+        console.error('Error getting active reminders:', error);
+        return { success: false, error: (error as Error).message };
+    }
+}

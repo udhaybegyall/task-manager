@@ -1,6 +1,6 @@
 'use server';
 
-import { signIn } from '@/auth';
+import { signIn, signOut } from '@/auth';
 import { API_BASE_URL } from '@/config';
 import { AuthError } from 'next-auth';
 import { redirect } from 'next/navigation';
@@ -27,6 +27,10 @@ export async function login(formData: FormData) {
         }
         throw error;
     }
+}
+
+export async function logout() {
+    await signOut();
 }
 
 interface RegisterData {
