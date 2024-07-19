@@ -4,20 +4,27 @@ import React, { useEffect, useState } from 'react';
 import Task from '@/components/task/task';
 import useTaskStore from '@/hooks/useTaskStore';
 import { useToast } from '@/components/ui/use-toast';
-import { PackageOpen } from 'lucide-react';
 
 import TaskSkeleton from '@/components/skeleton/task-skeleton';
+import TaskNotFound from '@/components/task/not-found';
 
 const statusOrder = {
-    'To Do': 1,
-    'In Progress': 0,
+    'To Do': 0,
+    'In Progress': 1,
     Done: 2,
 };
 
 export default function TaskList() {
     const [expandedTaskId, setExpandedTaskId] = useState<string | null>(null);
-    const { tasks, isLoading, error, fetchTasks, deleteTask, filterStatus } =
-        useTaskStore();
+    const {
+        tasks,
+        isLoading,
+        error,
+        fetchTasks,
+        deleteTask,
+        filterStatus,
+        searchTerm,
+    } = useTaskStore();
     const { toast } = useToast();
 
     useEffect(() => {
@@ -45,10 +52,14 @@ export default function TaskList() {
         return <div className='text-red-500'>{error}</div>;
     }
 
-    const filteredTasks =
-        filterStatus === 'All'
-            ? tasks
-            : tasks.filter(task => task.status === filterStatus);
+    const filteredTasks = tasks.filter(task => {
+        const matchesStatus =
+            filterStatus === 'All' || task.status === filterStatus;
+        const matchesSearch =
+            task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            task.description.toLowerCase().includes(searchTerm.toLowerCase());
+        return matchesStatus && matchesSearch;
+    });
 
     const sortedTasks = filteredTasks.sort(
         (a, b) => statusOrder[a.status] - statusOrder[b.status]
@@ -71,15 +82,7 @@ export default function TaskList() {
                     />
                 ))
             ) : (
-                <div className='mt-10'>
-                    <div className='flex items-center justify-center gap-2'>
-                        <PackageOpen className='h-5 w-5' />
-                        <h1 className='font-[500]'>No tasks found</h1>
-                    </div>
-                    <p className='text-center text-muted-foreground mt-2'>
-                        You don&apos;t have any tasks yet.
-                    </p>
-                </div>
+                <TaskNotFound />
             )}
         </div>
     );

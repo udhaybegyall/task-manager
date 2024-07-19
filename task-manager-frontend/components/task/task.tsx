@@ -2,10 +2,11 @@
 
 import { useRef, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Trash2, Edit } from 'lucide-react';
+import { Trash2, Edit, Bell } from 'lucide-react';
 
 import UpdateTaskButton from './update-task-button';
 import { truncateDescription } from '@/lib/utils';
+import ReminderPopover from './reminder-popover';
 
 interface TaskProps {
     id: string;
@@ -64,42 +65,45 @@ export default function Task({
             >
                 <div
                     ref={taskRef}
-                    className={`p-4 border rounded-md shadow-sm bg-background transition-all duration-300 ease-in-out ${
-                        isExpanded ? 'w-[80%]' : 'w-full'
+                    className={`flex justify-between p-4 border rounded-md shadow-sm bg-background transition-all duration-300 ease-in-out ${
+                        isExpanded ? 'w-[70%] md:w-[80%]' : 'w-full'
                     }`}
                 >
-                    <h3
-                        className={`${
-                            isDone
-                                ? 'line-through text-muted-foreground'
-                                : 'text-primary'
-                        }`}
-                    >
-                        {title}
-                    </h3>
-                    <p className='text-muted-foreground text-sm'>
-                        {isExpanded
-                            ? description
-                            : truncateDescription(description, 50)}
-                    </p>
-                    <p className='text-sm mt-2 text-muted-foreground'>
-                        Status:{' '}
-                        <span
+                    <div>
+                        <h3
                             className={`${
-                                status === 'In Progress'
-                                    ? 'text-green-500'
-                                    : status === 'To Do'
-                                    ? 'text-red-500'
-                                    : ''
+                                isDone
+                                    ? 'line-through text-muted-foreground'
+                                    : 'text-primary'
                             }`}
                         >
-                            {status}
-                        </span>
-                    </p>
+                            {title}
+                        </h3>
+                        <p className='text-muted-foreground text-sm'>
+                            {isExpanded
+                                ? description
+                                : truncateDescription(description, 50)}
+                        </p>
+                        <p className='text-sm mt-2 text-muted-foreground'>
+                            Status:{' '}
+                            <span
+                                className={`${
+                                    status === 'In Progress'
+                                        ? 'text-green-500'
+                                        : status === 'To Do'
+                                        ? 'text-red-500'
+                                        : ''
+                                }`}
+                            >
+                                {status}
+                            </span>
+                        </p>
+                    </div>
+                    <ReminderPopover id={id} />
                 </div>
                 <div
                     className={`flex transition-all duration-300 ease-in-out ${
-                        isExpanded ? 'w-[20%]' : 'hidden'
+                        isExpanded ? 'w-[30%] md:w-[20%]' : 'hidden'
                     }`}
                     style={{ height: `${taskHeight}px` }}
                 >
