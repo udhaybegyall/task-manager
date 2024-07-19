@@ -1,10 +1,13 @@
 import withAuth from '@/components/auth/with-auth';
-import { Separator } from '@/components/ui/separator';
-import AddTaskButton from '@/components/task/add-task-button';
+
 import TaskList from '@/components/task/task-list';
 import TaskFilter from '@/components/task/task-filter';
 import TaskSearch from '@/components/task/task-search';
-import ActiveRemindersPopover from '@/components/task/active-reminders-popover';
+import AddTaskButton from '@/components/task/add-task-button';
+
+import { Separator } from '@/components/ui/separator';
+
+import ActiveRemindersWrapper from './active-reminders-wrapper';
 
 async function DashboardPage() {
     return (
@@ -12,7 +15,7 @@ async function DashboardPage() {
             <div className='sticky top-0 bg-background z-40'>
                 <div className='pt-4'>
                     <div className='flex justify-end mb-6'>
-                        <ActiveRemindersPopover />
+                        <ActiveRemindersWrapper />
                     </div>
                     <Separator className='mb-6' />
                     <div className='flex flex-col md:flex-row justify-between mb-4 md:mb-6'>

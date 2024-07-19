@@ -7,7 +7,7 @@ export default async function RegisterPage() {
     const session = await auth();
 
     if (session) {
-        return redirect('/dashboard');
+        return redirect('/tasks');
     }
 
     return (

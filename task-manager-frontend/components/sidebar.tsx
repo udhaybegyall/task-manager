@@ -110,13 +110,13 @@ const Sidebar = () => {
                     ref={sidebarRef}
                     className={`
                         fixed left-0 top-0 h-screen bg-background text-foreground 
-                        flex flex-col items-center justify-between py-4 px-2
+                        flex flex-col justify-between py-4 px-2
                         transition-all duration-300 ease-in-out
                         md:translate-x-0 md:w-20 z-50
                         ${
                             isSidebarOpen
                                 ? 'translate-x-0 w-64'
-                                : '-translate-x-full w-64'
+                                : '-translate-x-full w-64 items-center'
                         }
                     `}
                 >
@@ -133,7 +133,7 @@ const Sidebar = () => {
                         {/* Navigation Icons */}
                         <div className={`${isSidebarOpen ? 'w-full' : ''}`}>
                             <NavItem
-                                href='/dashboard'
+                                href='/tasks'
                                 icon={CheckSquare}
                                 label='Tasks'
                             />
@@ -148,26 +148,13 @@ const Sidebar = () => {
                     {/* User Avatar and Dropdown */}
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <div
-                                className={`${
-                                    isSidebarOpen
-                                        ? 'flex items-center border-2 border-border p-2 px-6 rounded-[50px]'
-                                        : ''
-                                }`}
-                            >
-                                <Avatar className={isSidebarOpen ? 'mr-2' : ''}>
-                                    <AvatarImage
-                                        src='https://avatars.githubusercontent.com/u/38879140?s=48&v=4'
-                                        alt='@begyall'
-                                    />
-                                    <AvatarFallback>UB</AvatarFallback>
-                                </Avatar>
-                                {isSidebarOpen && (
-                                    <span className='text-sm text-muted-foreground'>
-                                        Udhay
-                                    </span>
-                                )}
-                            </div>
+                            <Avatar className={isSidebarOpen ? 'ml-2' : ''}>
+                                <AvatarImage
+                                    src='https://avatars.githubusercontent.com/u/38879140?s=48&v=4'
+                                    alt='@begyall'
+                                />
+                                <AvatarFallback>UB</AvatarFallback>
+                            </Avatar>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent
                             align='end'

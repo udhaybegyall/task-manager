@@ -8,5 +8,5 @@ export default async function Home() {
         return redirect('/login');
     }
 
-    redirect('/dashboard');
+    redirect('/tasks');
 }
